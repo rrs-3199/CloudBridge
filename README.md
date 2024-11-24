@@ -95,6 +95,9 @@ CloudBridge adopts Azure’s **cloud-native services** to achieve:
 - Enhanced performance using Databricks and Synapse Analytics  
 - Streamlined architecture  
 
+> [!IMPORTANT]  
+> For detailed implementation please checkout [implementation guide](implementation/implementation.md)
+
 ## ⚖ **Legacy vs. CloudBridge**  
 
 ### ⚠️ **Challenges with Legacy Architecture**  
