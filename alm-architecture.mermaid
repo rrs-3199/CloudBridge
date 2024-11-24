@@ -1,0 +1,61 @@
+flowchart TB
+    subgraph "Source Systems"
+        EDS["Enterprise Data Service (EDS)"]
+        EDS --> |CSV| WF["Workflow Engine"]
+        EDS --> |DAT| WF
+        EDS --> |JSON| WF
+    end
+
+    subgraph "Data Processing Layer"
+        WF --> |Format Headers\nBal_dt\nFooter\nField Mapping| OF["Outbound Files"]
+
+        subgraph "Outbound File Types"
+            OF --> CRED["OEDS_FIN_RPT_CC\n(Credit Data)"]
+            OF --> DEP["OEDS_FIN_MTX_SAV\n(Deposit Data)"]
+            OF --> LOAN["OEDS_FIN_GLB_LNS\n(Loan Data)"]
+            OF --> WSD["Other Wall Street Data"]
+        end
+    end
+
+    subgraph "SSIS Integration Layer"
+        SSIS["SSIS Packages"]
+        CRED --> |Credit Package| SSIS
+        DEP --> |Deposit Package| SSIS
+        LOAN --> |Loan Package| SSIS
+        WSD --> |Wall Street Package| SSIS
+    end
+
+    subgraph "Database Layers (SSMS)"
+        subgraph "Bronze (Stage)"
+            SSIS --> STG_DEP["t_fin_savings_stg"]
+            SSIS --> STG_LOAN["t_fin_loans_stg"]
+            SSIS --> STG_CRED["t_fin_credit_stg"]
+        end
+
+        subgraph "Silver (Position)"
+            STG_DEP --> |Basic\nTransformation| POS_DEP["t_fin_savings_pstn"]
+            STG_LOAN --> |Basic\nTransformation| POS_LOAN["t_fin_loans_pstn"]
+            STG_CRED --> |Basic\nTransformation| POS_CRED["t_fin_credit_pstn"]
+        end
+
+        subgraph "Gold (Normalize)"
+            POS_DEP --> |Business\nRules| NRM_DEP["t_fin_savings_nrm"]
+            POS_LOAN --> |Business\nRules| NRM_LOAN["t_fin_loans_nrm"]
+            POS_CRED --> |Business\nRules| NRM_CRED["t_fin_credit_nrm"]
+        end
+    end
+
+    subgraph "Presentation Layer"
+        DWH["Data Warehouse"]
+        NRM_DEP --> DWH
+        NRM_LOAN --> DWH
+        NRM_CRED --> DWH
+        DWH --> DASH["Central Dashboard\n(Charts & Tables)"]
+    end
+
+    subgraph "Batch Processing"
+        BATCH["Legacy Batch Job"]
+        BATCH -.-> |"Orchestrates\nEntire Flow"| OF
+        BATCH -.-> |"Controls\nTransformations"| SSIS
+        BATCH -.-> |"Manages\nData Loading"| DWH
+    end
