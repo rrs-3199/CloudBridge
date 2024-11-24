@@ -11,3 +11,5 @@ We created three types of visuals in the report:
 - **Number Bars**: Highlight key metrics, including the total number of customers, product sales, and related details.  
 
 ## 📸 Snapshots
+
+![Descriptive Alt Text](../../diagrams/implementation/power_bi_report.jpg)

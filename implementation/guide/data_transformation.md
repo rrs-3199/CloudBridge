@@ -21,3 +21,7 @@ We leveraged **Azure Databricks** to execute pipelines using **PySpark**. These 
 - The output of each pipeline is stored in **Parquet format**, ensuring efficient storage and compatibility for downstream processing.
 
 ## 📸 Snapshots
+
+![Descriptive Alt Text](../../diagrams/implementation/adb_notebook_storage_mount.jpg)
+![Descriptive Alt Text](../../diagrams/implementation/adb_notebook_bronze_silver.jpg)
+![Descriptive Alt Text](../../diagrams/implementation/adb_notebook_silver_gold.jpg)

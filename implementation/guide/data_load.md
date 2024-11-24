@@ -8,3 +8,5 @@ In this context, the views do not store physical data; instead, they act as a vi
 To simplify and automate the process, we developed a **stored procedure** that iterates through all the tables stored in the containers and creates views based on the data. This is achieved by establishing a direct connection to the containers, ensuring seamless integration and efficient view creation.
 
 ## 📸 Snapshots
+
+![Descriptive Alt Text](../../diagrams/implementation/synapse_views.jpg)
