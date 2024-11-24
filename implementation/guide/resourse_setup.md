@@ -9,3 +9,5 @@ We have established the foundational prerequisites required to execute the proje
 - **Resource Group**: A resource group was created in Azure to serve as a centralized hub for resources, enabling shared access and seamless integration.  
 
 ## 📸 Snapshots
+
+![Descriptive Alt Text](../../diagrams/implementation/resource_group.jpg)

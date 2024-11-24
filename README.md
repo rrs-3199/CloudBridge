@@ -1,13 +1,8 @@
-Here's a refined and visually appealing version of your README file, incorporating meaningful emojis and a better-organized structure for readability:
-
----
-
 # 🌉 **CloudBridge**
 
 ## 📄 **Project Overview**  
 CloudBridge is a modernization initiative aimed at migrating from a legacy on-premises database architecture to a cloud-native solution on Azure. This transformation leverages cloud capabilities to enhance **scalability**, **performance**, and **maintainability** while addressing the limitations of the legacy infrastructure.
 
----
 
 ## 🎯 **Purpose**  
 This modernization initiative addresses key business needs:  
@@ -17,7 +12,6 @@ This modernization initiative addresses key business needs:
 - **🛠 Enhance Maintainability**: Simplify updates and reduce complexities from multiple technology stacks.  
 - **⏩ Accelerate Development Cycles**: Streamline workflows to speed up feature delivery and reduce time-to-market.  
 
----
 
 ## 🏗 **Architecture**  
 
@@ -93,12 +87,13 @@ The legacy system was based on:
 - A complex multi-layered architecture  
 
 ### 🌐 **CloudBridge Solution**  
+
+![Descriptive Alt Text](./diagrams/cloud_bridge.jpg)
+
 CloudBridge adopts Azure’s **cloud-native services** to achieve:  
 - Automated, scalable data pipelines  
 - Enhanced performance using Databricks and Synapse Analytics  
 - Streamlined architecture  
-
----
 
 ## ⚖ **Legacy vs. CloudBridge**  
 
@@ -122,7 +117,7 @@ CloudBridge adopts Azure’s **cloud-native services** to achieve:
 | Data Processing        | Automated pipelines using PySpark             | Improved reliability            |
 | Scalability            | Elastic cloud scaling                         | Enhanced performance            |
 
----
+
 
 ## 🔄 **Data Flow**  
 
@@ -132,7 +127,7 @@ CloudBridge adopts Azure’s **cloud-native services** to achieve:
 4. **📂 Storage**: Processed data is stored in **Azure Synapse Analytics**.  
 5. **📊 Visualization**: Power BI provides analytics and reporting.  
 
----
+
 
 ## 🛠 **Technologies Used**  
 
