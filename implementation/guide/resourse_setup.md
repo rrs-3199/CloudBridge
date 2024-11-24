@@ -4,7 +4,7 @@ We have established the foundational prerequisites required to execute the proje
 
 ## 👨‍💻 **Tasks Overview** 
 
-- **Data**: Open-source data provided by Microsoft Azure was utilized for this project.  
+- **Data**: Open-source data provided by Microsoft Azure was utilized for this project [see here](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms).  
 - **Microsoft Integration Runtime**: Used to establish a communication channel between the local SSMS server and Azure Data Factory (ADF).  
 - **Resource Group**: A resource group was created in Azure to serve as a centralized hub for resources, enabling shared access and seamless integration.  
 
