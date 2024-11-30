@@ -10,3 +10,6 @@ To simplify and automate the process, we developed a **stored procedure** that i
 ## 📸 Snapshots
 
 ![Descriptive Alt Text](../../diagrams/implementation/synapse_views.jpg)
+
+
+![Demo](../../demo/sample2.mp4)
