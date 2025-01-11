@@ -1,124 +1,154 @@
-# ✈️ **Airlines Data Analytics**
+# 🌉 **CloudBridge**
 
 ## 📄 **Project Overview**  
-Apache Kafka is an open-source distributed event streaming platform designed for **high-throughput**, **fault-tolerant**, and **real-time** data streaming.For my project, I am developing a PySpark streaming application that processes data from a streaming source.Kafka was chosen as the streaming source due to the following reasons:
-
-**Scalability:** Kafka can handle high volumes of data with ease, allowing my application to scale as data increases.
-
-**Fault Tolerance:** Kafka’s distributed architecture ensures that data remains available even in case of node failures.
-
-**High Throughput:** Kafka is designed to handle large amounts of data in real-time, ensuring efficient streaming for PySpark applications.
-
-**Compatibility:** Kafka integrates seamlessly with PySpark, providing robust support for processing and analyzing streaming data.
-
-**Flexibility:** With Kafka topics, I can segregate data streams logically, enabling better management and processing of incoming data.
+CloudBridge is a modernization initiative aimed at migrating from a legacy on-premises database architecture to a cloud-native solution on Azure. This transformation leverages cloud capabilities to enhance **scalability**, **performance**, and **maintainability** while addressing the limitations of the legacy infrastructure.
 
 
+## 🎯 **Purpose**  
+This modernization initiative addresses key business needs:  
+
+- **🔧 Reduce Development Overhead**: Minimize manual interventions, SSIS package maintenance, and transformation rule implementation.  
+- **📈 Improve Scalability**: Overcome the limitations of handling increasing data volumes and concurrent processing requirements.  
+- **🛠 Enhance Maintainability**: Simplify updates and reduce complexities from multiple technology stacks.  
+- **⏩ Accelerate Development Cycles**: Streamline workflows to speed up feature delivery and reduce time-to-market.  
 
 
-##  **Data Source**  
-I have created three Kafka topics to handle different streams of data. These topics represent distinct regions and use cases, ensuring that data from different sources is logically separated and processed independently:
+## 🏗 **Architecture**  
 
-**East Coast:** This topic is designated for streaming data originating from the East Coast region.
+### 🔙 **Legacy System**  
 
-**West Coast:** This topic handles data streams from the West Coast region.
+```mermaid
+flowchart TB
+    subgraph "Source Systems"
+        EDS["Enterprise Data Service (EDS)"]
+        EDS --> |CSV| WF["Workflow Engine"]
+        EDS --> |DAT| WF
+        EDS --> |JSON| WF
+    end
 
-**Cross Country:** This topic is used for data that spans or connects across multiple regions, enabling analysis of nationwide trends.
+    subgraph "Data Processing Layer"
+        WF --> |Format Headers\nBal_dt\nFooter\nField Mapping| OF["Outbound Files"]
+
+        subgraph "Outbound File Types"
+            OF --> CRED["OEDS_FIN_RPT_CC\n(Credit Data)"]
+            OF --> DEP["OEDS_FIN_MTX_SAV\n(Deposit Data)"]
+            OF --> LOAN["OEDS_FIN_GLB_LNS\n(Loan Data)"]
+            OF --> WSD["Other Wall Street Data"]
+        end
+    end
+
+    subgraph "SSIS Integration Layer"
+        SSIS["SSIS Packages"]
+        CRED --> |Credit Package| SSIS
+        DEP --> |Deposit Package| SSIS
+        LOAN --> |Loan Package| SSIS
+        WSD --> |Wall Street Package| SSIS
+    end
+
+    subgraph "Database Layers (SSMS)"
+        subgraph "Bronze (Stage)"
+            SSIS --> STG_DEP["t_fin_savings_stg"]
+            SSIS --> STG_LOAN["t_fin_loans_stg"]
+            SSIS --> STG_CRED["t_fin_credit_stg"]
+        end
+
+        subgraph "Silver (Position)"
+            STG_DEP --> |Basic\nTransformation| POS_DEP["t_fin_savings_pstn"]
+            STG_LOAN --> |Basic\nTransformation| POS_LOAN["t_fin_loans_pstn"]
+            STG_CRED --> |Basic\nTransformation| POS_CRED["t_fin_credit_pstn"]
+        end
+
+        subgraph "Gold (Normalize)"
+            POS_DEP --> |Business\nRules| NRM_DEP["t_fin_savings_nrm"]
+            POS_LOAN --> |Business\nRules| NRM_LOAN["t_fin_loans_nrm"]
+            POS_CRED --> |Business\nRules| NRM_CRED["t_fin_credit_nrm"]
+        end
+    end
+
+    subgraph "Presentation Layer"
+        DWH["Data Warehouse"]
+        NRM_DEP --> DWH
+        NRM_LOAN --> DWH
+        NRM_CRED --> DWH
+        DWH --> DASH["Central Dashboard\n(Charts & Tables)"]
+    end
+
+    subgraph "Batch Processing"
+        BATCH["Legacy Batch Job"]
+        BATCH -.-> |"Orchestrates\nEntire Flow"| OF
+        BATCH -.-> |"Controls\nTransformations"| SSIS
+        BATCH -.-> |"Manages\nData Loading"| DWH
+    end
+```
+
+The legacy system was based on:  
+- On-premises SQL Server (SSMS)  
+- Data workflows implemented using SSIS  
+- A complex multi-layered architecture  
+
+### 🌐 **CloudBridge Solution**  
+
+![Descriptive Alt Text](./diagrams/cloud_bridge.jpg)
+
+CloudBridge adopts Azure’s **cloud-native services** to achieve:  
+- Automated, scalable data pipelines  
+- Enhanced performance using Databricks and Synapse Analytics  
+- Streamlined architecture  
+
+> [!IMPORTANT]  
+> For detailed implementation please checkout [implementation guide](implementation/implementation.md)
+
+## ⚖ **Legacy vs. CloudBridge**  
+
+### ⚠️ **Challenges with Legacy Architecture**  
+
+| **Aspect**            | **Legacy System**                              | **Impact**                      |
+|------------------------|-----------------------------------------------|----------------------------------|
+| Development Time       | 3 weeks per feature                           | Slow delivery cycles            |
+| Resource Utilization   | 30 developers for maintenance                 | High operational costs          |
+| Technology Stack       | EDS → SSIS → SSMS → Web UI                    | Complex maintenance             |
+| Data Processing        | Manual transformations, error-prone           | Delays and reliability issues   |
+| Scalability            | Limited by on-premises infrastructure         | Performance bottlenecks         |
+
+### 🌟 **Benefits of CloudBridge**  
+
+| **Aspect**            | **Modern System**                              | **Impact**                      |
+|------------------------|-----------------------------------------------|----------------------------------|
+| Development Time       | Automated processes, minimal manual effort    | Faster feature delivery         |
+| Resource Utilization   | Optimized team size                           | Reduced operational costs       |
+| Technology Stack       | Azure-native tools (ADF, Databricks, Synapse) | Simplified maintenance          |
+| Data Processing        | Automated pipelines using PySpark             | Improved reliability            |
+| Scalability            | Elastic cloud scaling                         | Enhanced performance            |
 
 
 
-### 🏗 **Architecture**  
+## 🔄 **Data Flow**  
 
-### 🔄 **Data Transform**  
-
-This PySpark application is designed to process flight data from Kafka topics in real-time, perform analytics, and write the results to a Redis cluster for further consumption. Below is an explanation of the key components of the streaming job:
-
-**Schema Definition**
-
-A schema is defined for the incoming flight data to ensure proper parsing and validation. It includes fields such as flight ID, airline, departure and arrival details, passenger count, ticket price, and delay information.
-
-**Reading Kafka Topics**
-
-The application reads from three Kafka topics (east-coast-flights, west-coast-flights, and cross-country-flights). Each topic represents a specific data source, ensuring logical segregation of incoming data streams.
-
-**Processing Data**
-
-The streaming data is processed in the following steps:
-
-**Parsing:** Kafka messages are deserialized and structured using the defined schema.
-**Enrichment:** Additional fields such as route_name and event_time are added to enhance the data.
-**Union:** Data from all topics is combined into a single DataFrame for unified processing.
-**Analytics**
-
-The application performs the following analytics on the streaming data:
-
-Average ticket price and delay for each flight.
-
-**Writing to Redis**
-
-The aggregated results are written to a Redis cluster. Each record is stored as a hash, with keys and fields based on flight ID, route name, and time windows. This enables efficient querying and further processing of the analytics data.
-
-**Key Features**
-
-Real-time processing with watermarking to handle late-arriving data.
-
-Batch processing with optimizations for high throughput.
-
-Error handling to ensure resilience during Redis writes.
-
-**Execution**
-
-The streaming job is triggered every 30 seconds, ensuring timely updates to the Redis cluster.
-
-### **kafka Producer**
-To feed data into the Kafka topics, three producers have been configured. Each producer reads data from its respective source and writes to the designated Kafka topic:
-
-**Cross Country Producer:** Configured in cross-country-producer.yaml, this producer sends data to the cross-country-flights Kafka topic.
-**East Coast Producer:** Configured in east-coast-producer.yaml, this producer sends data to the east-coast-flights Kafka topic.
-**West Coast Producer:** Configured in west-coast-producer.yaml, this producer sends data to the west-coast-flights Kafka topic.
-
-### **Producer Features**
-- **Data Randomization**: Simulates real-world flight scenarios with random parameters.
-- **Efficiency**: Configured with batching, compression, and retries for performance.
-- **Integration**: Writes JSON-encoded messages compatible with Kafka's schema requirements.
-
-### **kubernetes RBAC setup**
-
-This README provides details about setting up Kubernetes Role-Based Access Control (RBAC) for Apache Spark using the provided YAML configuration files.
-
-**The RBAC setup consists of the following YAML files:**
-
-**cluster-role-binding.yaml:** Defines cluster-level permissions binding a cluster role to a user, group, or service account.
-
-**cluster-role.yaml:** Specifies cluster-wide access permissions for resources.
-
-**pod-access-role.yaml:** Grants access permissions specific to pods.
-
-**rolebinding-pod-access.yaml:** Binds the pod-access-role to a user or service account.
-
-**service-account.yaml:** Defines a service account for the Spark application.
-
-**spark-operator-role-binding.yaml:** Role binding for the Spark operator.
-
-**spark-operator-role.yaml:** Role definition for the Spark operator.
-
-**spark-rbac-setup.yaml:** Aggregates all RBAC components for streamlined setup.
+1. **📥 Raw Data Ingestion**: Data from EDS is stored in **SSMS**.  
+2. **🔄 Data Movement**: Azure Data Factory orchestrates transfer to **Azure Data Lake**.  
+3. **⚙️ Data Transformation**: Databricks notebooks process data using **PySpark**.  
+4. **📂 Storage**: Processed data is stored in **Azure Synapse Analytics**.  
+5. **📊 Visualization**: Power BI provides analytics and reporting.  
 
 
-### 📦 **Docker File**
 
-The provided Dockerfile creates a containerized environment for running Apache Spark jobs written in Python.
+## 🛠 **Technologies Used**  
 
-**Base Image:** The base image used is apache/spark-py:3.4.0, which includes Apache Spark and Python.
+### ☁️ **Cloud Platform**  
+- **Azure Cloud**: Core platform hosting all services.  
 
-**Working Directory:** The working directory is set to /opt/spark/work-dir/bob initially, then changed to /opt/spark/work-dir/airlines_data_analytics/src/jobs.
+### 🗂 **Data Storage & Processing**  
+- **Azure Data Factory**: Data integration service.  
+- **Azure Data Lake**: Tiered data storage (Bronze, Silver, Gold).  
+- **Azure Synapse Analytics**: Scalable analytics service.  
+- **Azure Databricks**: Big data processing platform.  
 
-**Installing Python Dependencies:** Required Python libraries are installed from requirements.txt using pip3.
+### 🔄 **Data Integration & Transformation**  
+- **PySpark**: Engine for scalable data processing.  
+- **Databricks Notebooks**: Development environment for transformation logic.  
 
-**Copying Scripts:** The feature_materializer.py script is copied to the container.
+### 📊 **Visualization & Reporting**  
+- **Power BI**: BI and visualization platform.  
 
-**Setting Permissions:** The spark_streaming.py script is given executable permissions.
-
-### 🔄 **Data Load**
-
-This Docker image supports loading data into a Redis database. Ensure that the required Python Redis library is specified in your requirements.txt file.
+### 📡 **Source System**  
+- **Enterprise Data Service (EDS)**: Primary raw data source.
