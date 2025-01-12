@@ -12,6 +12,9 @@ This modernization initiative addresses key business needs:
 - **🛠 Enhance Maintainability**: Simplify updates and reduce complexities from multiple technology stacks.  
 - **⏩ Accelerate Development Cycles**: Streamline workflows to speed up feature delivery and reduce time-to-market.  
 
+### 🎥 Project Demo
+
+[![Demo](diagrams/implementation/adf_pipeline.jpg)](https://youtu.be/Oj2W-znvzIg?si=ICEFk05uFgJivTNG)
 
 ## 🏗 **Architecture**  
 
@@ -153,4 +156,3 @@ CloudBridge adopts Azure’s **cloud-native services** to achieve:
 ### 📡 **Source System**  
 - **Enterprise Data Service (EDS)**: Primary raw data source.
 
-![Demo](diagrams/implementation/adf_pipeline.jpg)](https://youtu.be/Oj2W-znvzIg?si=ICEFk05uFgJivTNG)
