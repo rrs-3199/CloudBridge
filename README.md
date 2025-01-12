@@ -152,3 +152,5 @@ CloudBridge adopts Azure’s **cloud-native services** to achieve:
 
 ### 📡 **Source System**  
 - **Enterprise Data Service (EDS)**: Primary raw data source.
+
+![Demo](diagrams/implementation/adf_pipeline.jpg)](https://youtu.be/Oj2W-znvzIg?si=ICEFk05uFgJivTNG)
